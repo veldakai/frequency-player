@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequency Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    input {
+      margin: 10px;
+      padding: 5px;
+      width: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Frequency Player</h1>
+  <p>Enter three frequencies (in Hz) to play:</p>
+
+  <input type="number" id="freq1" placeholder="Frequency 1" value="440">
+  <input type="number" id="freq2" placeholder="Frequency 2" value="550">
+  <input type="number" id="freq3" placeholder="Frequency 3" value="660">
+  <br>
+  <button id="playButton">Play</button>
+  <button id="stopButton" disabled>Stop</button>
+
+  <script>
+    const playButton = document.getElementById('playButton');
+    const stopButton = document.getElementById('stopButton');
+
+    let audioContext;
+    let oscillators = [];
+
+    playButton.addEventListener('click', () => {
+      const freq1 = parseFloat(document.getElementById('freq1').value);
+      const freq2 = parseFloat(document.getElementById('freq2').value);
+      const freq3 = parseFloat(document.getElementById('freq3').value);
+
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      const frequencies = [freq1, freq2, freq3];
+
+      frequencies.forEach(freq => {
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        oscillators.push(oscillator);
+      });
+
+      playButton.disabled = true;
+      stopButton.disabled = false;
+    });
+
+    stopButton.addEventListener('click', () => {
+      oscillators.forEach(oscillator => oscillator.stop());
+      oscillators = [];
+
+      audioContext.close();
+
+      playButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
+</body>
+</html>
