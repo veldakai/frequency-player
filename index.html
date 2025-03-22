@@ -25,13 +25,22 @@
   <h1>Frequency Player</h1>
   <p>Enter three frequencies (in Hz) to play:</p>
 
-  <input type="number" id="freq1" placeholder="Frequency 1" value="440">
-  <input type="number" id="freq2" placeholder="Frequency 2" value="550">
-  <input type="number" id="freq3" placeholder="Frequency 3" value="660">
+  <input type="number" id="freq1" placeholder="Frequency 1" value="20">
+  <input type="number" id="freq2" placeholder="Frequency 2" value="20.1">
+  <input type="number" id="freq3" placeholder="Frequency 3" value="20.1">
   <br>
   <button id="playButton">Play</button>
   <button id="stopButton" disabled>Stop</button>
 
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js').then(() => {
+        console.log('Service Worker Registered');
+      });
+    }
+  </script>
+  
   <script>
     const playButton = document.getElementById('playButton');
     const stopButton = document.getElementById('stopButton');
